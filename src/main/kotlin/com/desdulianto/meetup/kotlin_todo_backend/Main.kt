@@ -17,8 +17,8 @@ fun main(args: Array<String>) {
     val databaseUrl = "jdbc:h2:mem:todo"
     val conn = JdbcConnectionSource(databaseUrl)
     val taskDao: Dao<Task, Int> = DaoManager.createDao(conn, Task::class.java)
-    val mapper = jacksonObjectMapper()
     val taskService = TaskService(taskDao)
+    val mapper = jacksonObjectMapper()
 
     logger.info("Starting...")
 
