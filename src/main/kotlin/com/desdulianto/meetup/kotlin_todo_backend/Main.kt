@@ -72,7 +72,8 @@ fun main(args: Array<String>) {
 
         // request validation
         before("/task/:id") { req, res ->
-            val id = req.params("id").toIntOrNull()
+            val idParam = req.params("id")
+            val id = idParam.toIntOrNull()
             if (id != null) {
                 // don't do this on production system!
                 // this will do double work of getting the task from database
@@ -83,8 +84,10 @@ fun main(args: Array<String>) {
                     halt(mapper.writeValueAsString(mapOf("message" to "Task $id not found")))
                 }
             } else {
-                res.status(400)
-                halt(mapper.writeValueAsString(mapOf("message" to "Bad Request, invalid id format")))
+                if (idParam != "active" && idParam != "completed") {
+                    res.status(400)
+                    halt(mapper.writeValueAsString(mapOf("message" to "Bad Request, invalid id format")))
+                }
             }
         }
 
