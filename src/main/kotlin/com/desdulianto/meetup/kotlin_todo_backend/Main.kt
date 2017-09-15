@@ -11,6 +11,14 @@ import com.j256.ormlite.table.TableUtils
 import org.slf4j.LoggerFactory
 import spark.Spark.*
 
+fun initializeDefaultData(service: TaskService) {
+    val tasks = arrayOf(Task(content="Update readme"),
+                        Task(content="Drink water"),
+                        Task(content="Fix bug #2", complete=true))
+    tasks.forEach {
+        service.save(it)
+    }
+}
 
 fun main(args: Array<String>) {
     val logger = LoggerFactory.getLogger("todo-api")
@@ -24,6 +32,9 @@ fun main(args: Array<String>) {
 
     logger.info("Create table...")
     TableUtils.createTable(conn, Task::class.java)
+
+    logger.info("Initialize default data...")
+    initializeDefaultData(taskService)
 
     path("/api") {
         before("/*") { _, res ->
