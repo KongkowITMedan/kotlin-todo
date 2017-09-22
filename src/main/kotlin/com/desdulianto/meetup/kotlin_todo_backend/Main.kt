@@ -37,7 +37,15 @@ fun main(args: Array<String>) {
     initializeDefaultData(taskService)
 
     path("/api") {
+        // allow cors
+        options("/*") { _, _ ->
+        }
+
         before("/*") { _, res ->
+            res.header("Access-Control-Allow-Origin", "http://localhost:8080")
+            res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS")
+            res.header("Access-Control-Allow-Headers", "Content-Type")
+            res.header("Access-Control-Max-Age", "86400")
             res.type("application/json")
         }
 
